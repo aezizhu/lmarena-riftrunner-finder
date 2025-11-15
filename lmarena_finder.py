@@ -285,18 +285,39 @@ class LMArenaFinder:
         )
         
         self.status("AI is responding...")
+        time.sleep(3)  # Give time for error to appear if it will
+        
+        # Check for error early
+        if self.check_for_error():
+            raise Exception("Generation error detected")
         
         # Wait for maximize button to appear (response complete)
         self.status("Waiting for response to complete...")
-        try:
-            WebDriverWait(self.driver, 120).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, 'button[data-sentry-component="CopyButton"] + button:has(svg.lucide-maximize2)'))
-            )
-        except TimeoutException:
-            # Fallback: ensure at least one response block exists
-            WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '.prose'))
-            )
+        max_wait = 120
+        wait_interval = 5
+        elapsed = 0
+        
+        while elapsed < max_wait:
+            # Check for error during generation
+            if self.check_for_error():
+                raise Exception("Generation error detected during wait")
+            
+            # Check if response completed
+            try:
+                self.driver.find_element(By.CSS_SELECTOR, 'button[data-sentry-component="CopyButton"] + button:has(svg.lucide-maximize2)')
+                break  # Found completion indicator
+            except:
+                pass
+            
+            time.sleep(wait_interval)
+            elapsed += wait_interval
+        
+        # Final fallback check
+        if elapsed >= max_wait:
+            try:
+                self.driver.find_element(By.CSS_SELECTOR, '.prose')
+            except:
+                raise TimeoutException("No response found")
     
     def check_for_error(self) -> bool:
         """Check if 'Something went wrong' error appeared"""
@@ -380,14 +401,17 @@ class LMArenaFinder:
                 self.navigate_to_image_mode()
                 self.start_new_chat()
                 self.send_prompt_with_image(self.config["user_prompt"])
-                self.wait_for_response()
                 
-                # Check for "Something went wrong" error
-                if self.check_for_error():
-                    self.status("⚠️ Error detected - retrying this attempt...")
-                    self.handle_error_and_retry()
-                    time.sleep(2)
-                    continue  # Retry same attempt number
+                try:
+                    self.wait_for_response()
+                except Exception as e:
+                    if "error detected" in str(e).lower():
+                        self.status("⚠️ Generation error detected - retrying this attempt...")
+                        self.handle_error_and_retry()
+                        time.sleep(2)
+                        continue  # Retry same attempt number
+                    else:
+                        raise
                 
                 if self.check_responses(self.config["search_pattern"]):
                     self.status("Success! Matching model found.")
