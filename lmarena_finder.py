@@ -376,16 +376,24 @@ class LMArenaFinder:
         
         prose_elements = self.driver.find_elements(By.CSS_SELECTOR, '.prose')
         
+        # Typically arena shows 2 models side-by-side
         for i, element in enumerate(prose_elements):
             text = element.text
             if re.search(pattern, text, re.DOTALL):
-                self.status(f"✓ Match found in response #{i+1}!")
-                print(f"\n{'='*60}")
-                print(f"MATCH FOUND!")
-                print(f"{'='*60}")
-                print(f"Pattern: {pattern}")
-                print(f"Response preview:\n{text[:500]}...")
-                print(f"{'='*60}\n")
+                # Determine which model (A or B)
+                model_label = "Model A" if i == 0 else f"Model B" if i == 1 else f"Response #{i+1}"
+                
+                self.status(f"✓ Match found in {model_label}!")
+                print(f"\n{'='*70}")
+                print(f"✅ GEMINI 3.0 / 3.0 PRO FOUND!")
+                print(f"{'='*70}")
+                print(f"🎯 Target Model: {model_label}")
+                print(f"🔑 Pattern: {pattern}")
+                print(f"\n📝 Response preview:")
+                print(f"{text[:500]}...")
+                print(f"{'='*70}")
+                print(f"\n👉 The model you're looking for is: {model_label}")
+                print(f"{'='*70}\n")
                 return True
         
         return False
