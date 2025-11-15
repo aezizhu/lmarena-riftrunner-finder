@@ -27,6 +27,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# Browser profiles
+chrome_profile/
+
 # Playwright
 .pytest_cache/
 playwright/.cache/

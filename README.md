@@ -12,17 +12,19 @@ This tool automates the process of finding specific AI models (particularly Gemi
 
 ## ✨ Features
 
-- **Web Automation**: Uses Playwright to automate browser interactions
+- **Web Automation**: Uses Selenium with real Chrome browser for reliable automation
 - **Pattern Matching**: Regex-based response analysis to identify target models
 - **Auto-retry**: Continues testing until the target model is found
 - **Proxy Support**: Compatible with SOCKS5 proxies for network routing
 - **Configurable**: JSON-based configuration for prompts and patterns
 - **Headless Mode**: Can run without visible browser window
 - **Status Updates**: Real-time progress reporting
+- **Cloudflare Bypass**: Works with real Chrome to avoid bot detection
 
 ## 📋 Requirements
 
 - Python 3.8+
+- Google Chrome browser (installed on your system)
 - macOS, Linux, or Windows
 - Internet connection (proxy optional)
 
@@ -34,8 +36,9 @@ This tool automates the process of finding specific AI models (particularly Gemi
 # Install Python packages
 pip install -r requirements.txt
 
-# Install Playwright browsers
-python -m playwright install chromium
+# Note: Chrome browser must be installed on your system
+# On macOS: brew install --cask google-chrome
+# Or download from: https://www.google.com/chrome/
 ```
 
 ### 2. Configure
@@ -143,15 +146,14 @@ lmarena-gemini-finder/
 
 - **Rate Limiting**: Be mindful of lmarena.ai's usage policies
 - **Network**: Ensure stable internet connection for best results
-- **Browser**: Chromium is used by default (installed via Playwright)
+- **Browser**: Uses your installed Google Chrome browser
 - **Session State**: Each retry starts a fresh chat session
 
 ## 🐛 Troubleshooting
 
 **Browser doesn't open:**
-```bash
-python -m playwright install chromium
-```
+- Ensure Google Chrome is installed on your system
+- Check that ChromeDriver can be downloaded (webdriver-manager handles this automatically)
 
 **Timeout errors:**
 - Increase `timeout` in config.json
@@ -189,6 +191,10 @@ Response preview:
 
 [STATUS] Success! Matching model found.
 ```
+
+## 🙏 Acknowledgments
+
+This project was inspired by and developed based on techniques described in [this article](https://mp.weixin.qq.com/s?mid=2650934479&sn=fbba9e154fed1d2c128814d2ad546fb4&idx=1&__biz=MzA3Njc1MDU0OQ%3D%3D). Special thanks to the original author for sharing the aardio implementation and the clever fingerprinting technique.
 
 ## 📄 License
 

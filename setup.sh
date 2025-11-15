@@ -11,6 +11,15 @@ fi
 
 echo "✓ Python 3 found: $(python3 --version)"
 
+# Check if Chrome is installed
+if [ -d "/Applications/Google Chrome.app" ] || command -v google-chrome &> /dev/null; then
+    echo "✓ Google Chrome found"
+else
+    echo "⚠️  Warning: Google Chrome not detected"
+    echo "   Please install from: https://www.google.com/chrome/"
+    echo "   Or run: brew install --cask google-chrome"
+fi
+
 # Create virtual environment if it doesn't exist
 if [ ! -d "venv" ]; then
     echo "📦 Creating virtual environment..."
@@ -28,10 +37,6 @@ pip install --upgrade pip
 # Install requirements
 echo "📥 Installing Python dependencies..."
 pip install -r requirements.txt
-
-# Install Playwright browsers
-echo "🌐 Installing Playwright browsers (Chromium)..."
-python -m playwright install chromium
 
 # Make the main script executable
 chmod +x lmarena_finder.py
