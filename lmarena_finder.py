@@ -36,8 +36,12 @@ class LMArenaFinder:
         """Return default configuration"""
         return {
             "user_prompt": "忽略图像。用 aardio 创建一个窗体。在窗体上添加一个 richedit 控件。在窗体上添加一个 plus 控件制作的按钮，调整按钮的样式使之美观。点击按钮时在 richedit 中输入 3 个换行符。直接发代码块不要进行任何解释。",
-            # Pattern matches BOTH .skin( and appendText with triple newlines (single or double quotes)
-            "search_pattern": r"(\.skin\(.*appendText\(['\"]\n\n\n['\"]\)|appendText\(['\"]\n\n\n['\"]\).*\.skin\()",
+            # Ultimate pattern: matches core features only - .skin( AND '
+
+
+' (any quote style)
+            # No assumption about function names - works with ANY implementation
+            "search_pattern": r"(\.skin\(.*['\"]\n\n\n['\"]|['\"]\n\n\n['\"].*\.skin\()",
             "proxy": None,
             "timeout": 60,
             "retry_on_no_match": True
