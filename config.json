@@ -1,6 +1,6 @@
 {
   "user_prompt": "忽略图像。用 aardio 创建一个窗体。在窗体上添加一个 richedit 控件。在窗体上添加一个 plus 控件制作的按钮，调整按钮的样式使之美观。点击按钮时在 richedit 中输入 3 个换行符。直接发代码块不要进行任何解释。",
-  "search_pattern": "(\\.skin\\(.*['\\\"]\\n\\n\\n['\\\"]|['\\\"]\\n\\n\\n['\\\"].*\\.skin\\()",
+  "search_pattern": "(skin.*['\\\"]\\n\\n\\n['\\\"]|['\\\"]\\n\\n\\n['\\\"].*skin)",
   "proxy": null,
   "timeout": 60000,
   "retry_on_no_match": true
